@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,6 +35,38 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String _expression = "0";
+  String _history = "";
+
+  void _addCharacter(String char) {
+    setState(() {
+      _expression = _expression == "0" ? char : _expression + char;
+    });
+  }
+
+  void _allClear(String char) {
+    setState(() {
+      _expression = "";
+    });
+  }
+
+  void _calc(String char) {
+    try {
+      Parser p = Parser();
+      Expression exp = p.parse(_expression);
+      ContextModel cm = ContextModel();
+      setState(() {
+        _history = _expression;
+        _expression = exp.evaluate(EvaluationType.REAL, cm).toString();
+      });
+    } catch (e) {
+      setState(() {
+        _history = "invalid e xpression";
+        _expression = "0";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       // ignore: prefer_const_literals_to_create_immutables
                       children: [
                         Text(
-                          "69",
+                          _expression,
                           textAlign: TextAlign.right,
                           style: TextStyle(color: Colors.white, fontSize: 42),
                         ),
@@ -70,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           color: Colors.white,
                         ),
                         Text(
-                          "59+10",
+                          _history,
                           textAlign: TextAlign.right,
                           style: TextStyle(
                               color: Colors.white.withOpacity(0.6),
@@ -87,83 +120,142 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                   children: [
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("C", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("\$", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("%", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("/", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("7", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("8", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("9", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("4", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("5", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("6", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("1", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("2", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("3", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("C", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("C", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("C", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("C", style: TextStyle(fontSize: 42))),
-                    ElevatedButton(
-                        style: ButtonStyle(),
-                        onPressed: () {},
-                        child: Text("C", style: TextStyle(fontSize: 42))),
+                    CalcButton(
+                      character: "C",
+                      onPressed: _allClear,
+                    ),
+                    CalcButton(
+                      character: "\$",
+                      onPressed: _addCharacter,
+                    ),
+                    CalcButton(
+                      character: "%",
+                      onPressed: _addCharacter,
+                    ),
+                    CalcButton(
+                      character: "+",
+                      onPressed: _addCharacter,
+                      rounded: true,
+                      fillColor: Color(0xffF6E389),
+                      textColor: Colors.black,
+                    ),
+                    CalcButton(
+                      character: "7",
+                      onPressed: _addCharacter,
+                    ),
+                    CalcButton(
+                      character: "8",
+                      onPressed: _addCharacter,
+                    ),
+                    CalcButton(
+                      character: "9",
+                      onPressed: _addCharacter,
+                    ),
+                    CalcButton(
+                      character: "-",
+                      onPressed: _addCharacter,
+                      rounded: true,
+                      fillColor: Color(0xffF6E389),
+                      textColor: Colors.black,
+                    ),
+                    CalcButton(
+                      character: "4",
+                      onPressed: _addCharacter,
+                    ),
+                    CalcButton(
+                      character: "5",
+                      onPressed: _addCharacter,
+                    ),
+                    CalcButton(
+                      character: "6",
+                      onPressed: _addCharacter,
+                    ),
+                    CalcButton(
+                      character: "*",
+                      onPressed: _addCharacter,
+                      rounded: true,
+                      fillColor: Color(0xffF6E389),
+                      textColor: Colors.black,
+                    ),
+                    CalcButton(
+                      character: "1",
+                      onPressed: _addCharacter,
+                    ),
+                    CalcButton(
+                      character: "2",
+                      onPressed: _addCharacter,
+                    ),
+                    CalcButton(
+                      character: "3",
+                      onPressed: _addCharacter,
+                    ),
+                    CalcButton(
+                      character: "/",
+                      onPressed: _addCharacter,
+                      rounded: true,
+                      fillColor: Color(0xffF6E389),
+                      textColor: Colors.black,
+                    ),
+                    CalcButton(
+                      character: "0",
+                      onPressed: _addCharacter,
+                    ),
+                    CalcButton(
+                      character: ".",
+                      onPressed: _addCharacter,
+                    ),
+                    CalcButton(
+                      character: "=",
+                      onPressed: _calc,
+                      rounded: true,
+                      fillColor: Color(0xffF6E389),
+                      textColor: Colors.black,
+                    ),
                   ],
                 )
               ],
             ),
           ),
         ));
+  }
+}
+
+class CalcButton extends StatelessWidget {
+  final String character;
+  final Function onPressed;
+  final bool? rounded;
+  final Color fillColor;
+  final Color textColor;
+  final Color outlineColor;
+  final double? borderWidth;
+
+  const CalcButton({
+    Key? key,
+    required this.character,
+    required this.onPressed,
+    this.rounded = false,
+    this.fillColor = const Color(0xff35373B),
+    this.textColor = const Color(0xffffffff),
+    this.outlineColor = const Color(0xff4B4D51),
+    this.borderWidth = 2.0,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        side: BorderSide(color: outlineColor, width: borderWidth ?? 2.0),
+        backgroundColor: fillColor,
+        shape: rounded == true ? CircleBorder() : null,
+      ),
+      onPressed: () => onPressed(character),
+      child: Text(
+        character,
+        style: TextStyle(
+          fontSize: 42,
+          color: textColor,
+        ),
+      ),
+    );
   }
 }
