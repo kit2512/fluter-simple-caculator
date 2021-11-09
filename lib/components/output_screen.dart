@@ -36,7 +36,8 @@ class OutputScreen extends StatelessWidget {
             Text(
               Provider.of<CalcStateManager>(context).history,
               textAlign: TextAlign.right,
-              style: const TextStyle(color: Colors.white, fontSize: 42),
+              style:
+                  TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 22),
             ),
           ],
         ),
