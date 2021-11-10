@@ -25,7 +25,6 @@ class CalcStateManager extends ChangeNotifier {
       ContextModel cm = ContextModel();
       _history = _expression;
       _expression = exp.evaluate(EvaluationType.REAL, cm).toString();
-      notifyListeners();
     } catch (e) {
       _history = "invalid e xpression";
       _expression = "0";
